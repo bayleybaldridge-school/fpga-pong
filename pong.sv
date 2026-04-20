@@ -1,5 +1,6 @@
 // either this 
-`include "./Modules/DE10_VGA.sv" 
+`include "./Modules/DE10_VGA.sv"
+`include "./Modules/Ball.sv"
 // XOR "Project Navigator" > "File" > Add files > DE10_VGA.v
 // not both
 
