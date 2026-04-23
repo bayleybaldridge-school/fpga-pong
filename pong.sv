@@ -81,6 +81,10 @@ parameter [11:0] FIVE     = 12'd5;
 parameter [11:0] SEVEN    = 12'd7;
 parameter [11:0] THIRTEEN = 12'd13;
 
+
+
+
+
 // Drawing happens here, one pixel at a time
 always_ff @(posedge pixel_clk) begin
 		// 
@@ -92,10 +96,19 @@ always_ff @(posedge pixel_clk) begin
 			pixel_color <= 12'b0000_1111_1111; // teal
 		end else if (box3) begin
 			pixel_color <= 12'b1111_1111_0000; // brown?
+		end
+		
+		if(ball) begin
+			pixel_color <=12'b1111_0000_1111;
+		end
+		else begin
+			pixel_color <=12'b0000_0000_0000;
+		
+		end
 		//
 		//
-		// you can use X_pix and Y_pix location to draw a pixel color
-		end else if (X_pix < (WIDTH*TWO)/FIVE && Y_pix < (HEIGHT*SEVEN)/THIRTEEN) begin
+		/*// you can use X_pix and Y_pix location to draw a pixel color
+		 end else if (X_pix < (WIDTH*TWO)/FIVE && Y_pix < (HEIGHT*SEVEN)/THIRTEEN) begin
 			// Red[3:0]_Green[3:0]_Blue[3:0]
 			pixel_color <= 12'b1111_0000_0000; // red
 		end else if ( // What does this condition say?
@@ -105,6 +118,7 @@ always_ff @(posedge pixel_clk) begin
 		end else begin
 			pixel_color <= 12'b0000_0000_1111; // blue
 		end
+		*/
 		
 end
 	
@@ -131,16 +145,41 @@ DE10_VGA VGA_Driver
 	reg box;
 	reg box2;
 	reg box3;
+	reg ball;
+	
+		
+	reg [9:0] ballx;
+	reg [9:0] bally;
 
-	make_box customA (.X_pix(X_pix), .Y_pix(Y_pix), .box_width(10'b100000000), .box_height(10'b10000000),
-	.box_x_location(10'b1000000), .box_y_location(10'b10000000), .pixel_clk(pixel_clk), .box(box));
+
+
+	//make_box customA (.X_pix(X_pix), .Y_pix(Y_pix), .box_width(10'b100000000), .box_height(10'b10000000),
+	//.box_x_location(10'b1000000), .box_y_location(10'b10000000), .pixel_clk(pixel_clk), .box(box));
 	
-	make_box customB (.X_pix(X_pix), .Y_pix(Y_pix), .box_width(10'b100000), .box_height(10'b10000000),
-	.box_x_location(10'b100000000), .box_y_location(10'b10000), .pixel_clk(pixel_clk), .box(box2));
+	//make_box customB (.X_pix(X_pix), .Y_pix(Y_pix), .box_width(10'b100000), .box_height(10'b10000000),
+	//.box_x_location(10'b100000000), .box_y_location(10'b10000), .pixel_clk(pixel_clk), .box(box2));
 	
-	make_box customC (.X_pix(X_pix), .Y_pix(Y_pix), .box_width(10'b10000000), .box_height(10'b1000000),
-	.box_x_location(10'b1000000000), .box_y_location(10'b10000000), .pixel_clk(pixel_clk), .box(box3));
+	//make_box customC (.X_pix(X_pix), .Y_pix(Y_pix), .box_width(10'b10000000), .box_height(10'b1000000),
+	//.box_x_location(10'b1000000000), .box_y_location(10'b10000000), .pixel_clk(pixel_clk), .box(box3)); //these look bad
 	
+	
+		ball betternamesoon (
+		.clk(MAX10_CLK2_50),
+		.ballx(ballx),
+		.bally(bally)
+	);
+	
+	make_box balllocation (
+		.X_pix(X_pix),
+		.Y_pix(Y_pix),
+		.box_width(12'd10),
+		.box_height(12'd10),
+		.box_x_location(ballx),
+		.box_y_location(bally),
+		.pixel_clk(pixel_clk),
+		.box(ball)
+	);
+
 endmodule
 
 module make_box (
@@ -155,6 +194,7 @@ module make_box (
 );
 
 always @(posedge pixel_clk) begin
+
 	if((X_pix > box_x_location)&&(X_pix<(box_x_location+box_width))&&(Y_pix>box_y_location)&&(Y_pix<(box_y_location+box_height))) begin
 		box=1;
 	end else begin
