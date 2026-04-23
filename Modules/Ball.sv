@@ -57,15 +57,14 @@ parameter [11:0] RIGHTPADDLE =12'd200; //" 														  right paddle is
 reg signed [11:0] ball_speed_x;
 reg signed [11:0] ball_speed_y;
 reg [32:0] ballspeed;
-reg signed [2:0] ball_dir_x;
-reg signed [2:0] ball_dir_y;
+reg signed [3:0] ball_dir_x;
+reg signed [3:0] ball_dir_y;
 
 initial begin //at the start of the program make the ball in the center
  ballx = STARTX;
  bally = STARTY;
- ball_dir_x = -1;
- ball_speed_x =10;
- ball_speed_y =10;
+ ball_dir_x = 1;
+ ball_dir_y = 1;
 end
  
 always_ff @(posedge clk) begin
@@ -74,36 +73,47 @@ ballspeed = ballspeed +1;
 		
 	if(ballspeed >500000) begin //after 1000 cycles of the pixel clock actually move the ball	
 		ballspeed = 0;
-		//balldir = 0;
-		bally = ((ball_speed_y*ball_dir_y) + bally); //ball's movement in the y direction
-		ballx = ((ball_speed_x*ball_dir_x) + ballx); //in the x direction
-	end
-	if(ballx == LEFTPADDLE) begin //on a per paddle basis is way easier than doing both at the same time 
+		
+		
+		//ballx = 5*(ball_dir_x) + ballx;
+		if(ball_dir_x==1) begin
+			ballx = (ballx+5);
+			
+			if(ballx > 600) begin
+				ball_dir_x = -1;
+			end
+		end
+		
+		if(ball_dir_x==-1) begin
+			ballx = (ballx-5);
+			
+			if(ballx < 50) begin
+				ball_dir_x = 1;
+			end
+		end
+		
+		
+				if(ball_dir_y==1) begin
+			bally = (bally+5);
+			
+			if(bally > 450) begin
+				ball_dir_y = -1;
+			end
+		end
+		
+		if(ball_dir_y==-1) begin
+			bally = (bally-5);
+			
+			if(bally < 50) begin
+				ball_dir_y = 1;
+			end
+		end
+		
+		
+		end
+		
 	
-		//does bally = paddle y
-		//where on the paddle does it hit?
-		//change direction by how far it is on the paddle 
-			//eg dead center = balldir +180 ? you might need to do something fancy with multiplication?
-	end
-	
-	if(((ballx+10) >= 600)) begin //what do we do if we touch a wall?
-		//freak the fuck out //if ball is going right make it go left
-			ball_dir_x = -1;
-			ballx = 550;
 
-	end
-	
-	if((ballx =0)) begin //if ball is going left make it go right
-			ball_dir_x = 1; 
-			ballx = 10;
-	end
-	
-	if(((bally+10) >= 270) || (bally = 0)) begin
-			if(ball_dir_y>=0) //if ball is going up
-			ball_dir_y = -ball_dir_y;
-		if(ball_dir_y<0) //if ball is going up make it go down
-			ball_dir_y = -ball_dir_y;
-	end
 end
 	
 endmodule
