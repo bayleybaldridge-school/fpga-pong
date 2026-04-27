@@ -14,7 +14,7 @@ parameter [11:0] STARTX	= 12'd320;
 parameter [11:0] STARTY	= 12'd240;
 
 parameter [3:0] ONEPIXEL = 4'd1;
-parameter [11:0] BALL_PHYSICS_RATE = 12'd200000;
+parameter [31:0] BALL_PHYSICS_RATE = 32'd200000;
 
 reg signed [11:0] ball_speed_x;
 reg signed [11:0] ball_speed_y;

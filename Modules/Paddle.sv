@@ -10,7 +10,7 @@ parameter [11:0] ONEPIXEL	= 12'd1;
 parameter [9:0] START_Y = 10'd220;
 parameter [9:0] PADDLE_TOP_BOUND	= 12'd5;
 parameter [9:0] PADDLE_BOTTOM_BOUND	= 12'd415;
-parameter [12:0] PADDLE_PHYSICS_RATE = 12'd160000;
+parameter [31:0] PADDLE_PHYSICS_RATE = 32'd160000;
 reg [32:0] paddlespeed;
 
 initial begin //at the start of the program make the ball in the center
