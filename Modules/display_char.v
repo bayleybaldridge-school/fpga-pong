@@ -47,7 +47,7 @@ module display_char #(
 	output reg raster_we	
 );
 
-`include "log2.inc"
+`include "./Modules/log2.inc"
 localparam PIXEL_CNT_WIDTH = log2(FONT_DATA_WIDTH);
 localparam LINE_CNT_WIDTH = log2(FONT_HEIGHT);
 

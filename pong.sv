@@ -2,6 +2,7 @@
 `include "./Modules/DE10_VGA.sv"
 `include "./Modules/Ball.sv"
 `include "./Modules/Paddle.sv"
+`include "./Modules/display_char.v"
 // XOR "Project Navigator" > "File" > Add files > DE10_VGA.v
 // not both
 
@@ -91,6 +92,9 @@ parameter [11:0] BALL_HEIGHT	= 12'd10;
 
 parameter [11:0] LEFT_PADDLE_INIT_X	= 12'd0;
 parameter [11:0] RIGHT_PADDLE_INIT_X	= 12'd620;
+
+parameter [9:0] SCORE_X = 10'd310;
+parameter [9:0] SCORE_Y = 10'd10;
 
 // Drawing happens here, one pixel at a time
 always_ff @(posedge pixel_clk) begin
