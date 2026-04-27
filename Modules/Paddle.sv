@@ -44,6 +44,8 @@ module paddle(
 //reg [11:0] bally;
 parameter [11:0] SPEED	= 12'd5;
 parameter [9:0] START_Y = 10'd220;
+parameter [9:0] PADDLE_TOP_BOUND	= 12'd5;
+parameter [9:0] PADDLE_BOTTOM_BOUND	= 12'd415;
 reg [32:0] paddlespeed;
 
 initial begin //at the start of the program make the ball in the center
@@ -62,11 +64,11 @@ always_ff @(posedge clk) begin
 		
 		// Moving the paddle by 5 pixels in the direction of movement
 		
-		if( u_input[0:0] == 1 ) begin
+		if( (u_input[0:0] == 1) && (paddle_y < PADDLE_BOTTOM_BOUND) ) begin
 			paddle_y = paddle_y + SPEED;
 		end
 		
-		if( u_input[1:1] == 1 ) begin
+		if( (u_input[1:1] == 1) && (paddle_y > PADDLE_TOP_BOUND) ) begin
 			paddle_y = paddle_y - SPEED;
 		end
 		

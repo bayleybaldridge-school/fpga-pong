@@ -83,8 +83,14 @@ parameter [11:0] SEVEN    = 12'd7;
 parameter [11:0] THIRTEEN = 12'd13;
 
 
+parameter [11:0] PADDLE_WIDTH	= 12'd20;
+parameter [11:0] PADDLE_HEIGHT	= 12'd60;
 
+parameter [11:0] BALL_WIDTH	= 12'd10;
+parameter [11:0] BALL_HEIGHT	= 12'd10;
 
+parameter [11:0] LEFT_PADDLE_INIT_X	= 12'd0;
+parameter [11:0] RIGHT_PADDLE_INIT_X	= 12'd620;
 
 // Drawing happens here, one pixel at a time
 always_ff @(posedge pixel_clk) begin
@@ -173,8 +179,8 @@ DE10_VGA VGA_Driver
 	make_box balllocation (
 		.X_pix(X_pix),
 		.Y_pix(Y_pix),
-		.box_width(12'd10),
-		.box_height(12'd10),
+		.box_width(BALL_WIDTH),
+		.box_height(BALL_HEIGHT),
 		.box_x_location(ballx),
 		.box_y_location(bally),
 		.pixel_clk(pixel_clk),
@@ -183,8 +189,8 @@ DE10_VGA VGA_Driver
 	
 	paddle left_paddle (
 		.clk(MAX10_CLK2_50),
-		.u_input(SW[1:0]),
-		.init_x(10'd0),
+		.u_input(SW[9:8]),
+		.init_x(LEFT_PADDLE_INIT_X),
 		.paddle_x(l_paddle_x),
 		.paddle_y(l_paddle_y)
 	);
@@ -192,8 +198,8 @@ DE10_VGA VGA_Driver
 	make_box left_paddle_location (
 		.X_pix(X_pix),
 		.Y_pix(Y_pix),
-		.box_width(12'd20),
-		.box_height(12'd60),
+		.box_width(PADDLE_WIDTH),
+		.box_height(PADDLE_HEIGHT),
 		.box_x_location(l_paddle_x),
 		.box_y_location(l_paddle_y),
 		.pixel_clk(pixel_clk),
@@ -202,8 +208,8 @@ DE10_VGA VGA_Driver
 	
 	paddle right_paddle (
 		.clk(MAX10_CLK2_50),
-		.u_input(SW[3:2]),
-		.init_x(10'd620),
+		.u_input(SW[1:0]),
+		.init_x(RIGHT_PADDLE_INIT_X),
 		.paddle_x(r_paddle_x),
 		.paddle_y(r_paddle_y)
 	);
@@ -211,8 +217,8 @@ DE10_VGA VGA_Driver
 	make_box right_paddle_location (
 		.X_pix(X_pix),
 		.Y_pix(Y_pix),
-		.box_width(12'd20),
-		.box_height(12'd60),
+		.box_width(PADDLE_WIDTH),
+		.box_height(PADDLE_HEIGHT),
 		.box_x_location(r_paddle_x),
 		.box_y_location(r_paddle_y),
 		.pixel_clk(pixel_clk),
