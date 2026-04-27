@@ -13,6 +13,9 @@ module ball(
 parameter [11:0] STARTX	= 12'd320;
 parameter [11:0] STARTY	= 12'd240;
 
+parameter [3:0] ONEPIXEL = 4'd1;
+parameter [11:0] BALL_PHYSICS_RATE = 12'd200000;
+
 reg signed [11:0] ball_speed_x;
 reg signed [11:0] ball_speed_y;
 reg [32:0] ballspeed;
@@ -37,7 +40,7 @@ always_ff @(posedge clk) begin
 
 	ballspeed = ballspeed +1;
 		
-	if(ballspeed >300000) begin
+	if(ballspeed > BALL_PHYSICS_RATE) begin
 		ballspeed = 0;
 		
 		// Ball collision checks and changing direction
@@ -87,60 +90,21 @@ always_ff @(posedge clk) begin
 			ball_dir_y = 1;
 		end
 		
-		
 		// Ball movement
 		
 		if(ball_dir_x==1) begin
-			ballx = (ballx+1);
+			ballx = (ballx + ONEPIXEL);
 		end
 		else if (ball_dir_x==-1) begin
-			ballx = (ballx-1);
+			ballx = (ballx - ONEPIXEL);
 		end
 		
 		if(ball_dir_y==1) begin
-			bally = (bally+1);
+			bally = (bally + ONEPIXEL);
 		end
 		else if (ball_dir_y==-1) begin
-			bally = (bally-1);
+			bally = (bally - ONEPIXEL);
 		end
-		
-		//ballx = ballx + ball_dir_x;
-		//bally = bally + ball_dir_y;
-		
-		/*
-		if(ball_dir_x==1) begin
-			ballx = (ballx+1);
-			
-			if(ballx > 610) begin
-				ball_dir_x = -1;
-			end
-		end
-		
-		if(ball_dir_x==-1) begin
-			ballx = (ballx-1);
-			
-			if(ballx < 20) begin
-				ball_dir_x = 1;
-			end
-		end
-		
-		if(ball_dir_y==1) begin
-			bally = (bally+1);
-			
-			if(bally > 465) begin
-				ball_dir_y = -1;
-			end
-		end
-		
-		if(ball_dir_y==-1) begin
-			bally = (bally-1);
-			
-			if(bally < 5) begin
-				ball_dir_y = 1;
-			end
-		end
-		*/
-		
 	end
 	
 end
