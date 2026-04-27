@@ -170,10 +170,15 @@ DE10_VGA VGA_Driver
 	//.box_x_location(10'b1000000000), .box_y_location(10'b10000000), .pixel_clk(pixel_clk), .box(box3)); //these look bad
 	
 	// Object module followed by make_box for the object
-	ball betternamesoon (
+	ball pingpongball (
 		.clk(MAX10_CLK2_50),
 		.ballx(ballx),
-		.bally(bally)
+		.bally(bally),
+		.l_paddle_y(l_paddle_y),
+		.r_paddle_y(r_paddle_y),
+		.paddle_height(PADDLE_HEIGHT),
+		.ball_height(BALL_HEIGHT),
+		.reset_sw(KEY[0:0])
 	);
 	
 	make_box balllocation (
