@@ -50,8 +50,6 @@ parameter [11:0] STARTY	= 12'd240;
 parameter [11:0] LEFTPADDLE =12'd200; //wrong rn but will be the x location where the left paddle is
 parameter [11:0] RIGHTPADDLE =12'd200; //" 														  right paddle is
 
-
-
 //reg [11:0] ballx;
 //reg [11:0] bally;
 reg signed [11:0] ball_speed_x;
@@ -71,40 +69,40 @@ always_ff @(posedge clk) begin
 
 ballspeed = ballspeed +1;
 		
-	if(ballspeed >1600000) begin //after 1000 cycles of the pixel clock actually move the ball	
+	if(ballspeed >300000) begin
 		ballspeed = 0;
 		
 		
 		//ballx = 5*(ball_dir_x) + ballx;
 		if(ball_dir_x==1) begin
-			ballx = (ballx+5);
+			ballx = (ballx+1);
 			
-			if(ballx > 600) begin
+			if(ballx > 610) begin
 				ball_dir_x = -1;
 			end
 		end
 		
 		if(ball_dir_x==-1) begin
-			ballx = (ballx-5);
+			ballx = (ballx-1);
 			
-			if(ballx < 50) begin
+			if(ballx < 20) begin
 				ball_dir_x = 1;
 			end
 		end
 		
 		
 				if(ball_dir_y==1) begin
-			bally = (bally+5);
+			bally = (bally+1);
 			
-			if(bally > 450) begin
+			if(bally > 465) begin
 				ball_dir_y = -1;
 			end
 		end
 		
 		if(ball_dir_y==-1) begin
-			bally = (bally-5);
+			bally = (bally-1);
 			
-			if(bally < 50) begin
+			if(bally < 5) begin
 				ball_dir_y = 1;
 			end
 		end

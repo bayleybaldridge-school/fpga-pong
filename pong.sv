@@ -1,6 +1,7 @@
 // either this 
 `include "./Modules/DE10_VGA.sv"
 `include "./Modules/Ball.sv"
+`include "./Modules/Paddle.sv"
 // XOR "Project Navigator" > "File" > Add files > DE10_VGA.v
 // not both
 
@@ -90,20 +91,17 @@ always_ff @(posedge pixel_clk) begin
 		// 
 		// I ALSO WROTE THIS LITTLE SECTION HERE
 		//
-		if (box) begin
-			pixel_color <= 12'b1111_0000_1111; // magenta
-		end else if (box2) begin
-			pixel_color <= 12'b0000_1111_1111; // teal
-		end else if (box3) begin
-			pixel_color <= 12'b1111_1111_0000; // brown?
-		end
-		
 		if(ball) begin
 			pixel_color <=12'b1111_0000_1111;
 		end
+		else if (l_paddle) begin
+			pixel_color <= 12'b0000_1111_1111;
+		end
+		else if (r_paddle) begin
+			pixel_color <= 12'b1111_1111_0000;
+		end
 		else begin
 			pixel_color <=12'b0000_0000_0000;
-		
 		end
 		//
 		//
@@ -142,16 +140,19 @@ DE10_VGA VGA_Driver
 
 // I WROTE ALL OF THIS BELOW HERE
 	
-	reg box;
-	reg box2;
-	reg box3;
 	reg ball;
+	reg l_paddle;
+	reg r_paddle;
 	
 		
 	reg [9:0] ballx;
 	reg [9:0] bally;
-
-
+	
+	reg [9:0] l_paddle_x;
+	reg [9:0] l_paddle_y;
+	
+	reg [9:0] r_paddle_x;
+	reg [9:0] r_paddle_y;
 
 	//make_box customA (.X_pix(X_pix), .Y_pix(Y_pix), .box_width(10'b100000000), .box_height(10'b10000000),
 	//.box_x_location(10'b1000000), .box_y_location(10'b10000000), .pixel_clk(pixel_clk), .box(box));
@@ -178,6 +179,44 @@ DE10_VGA VGA_Driver
 		.box_y_location(bally),
 		.pixel_clk(pixel_clk),
 		.box(ball)
+	);
+	
+	paddle left_paddle (
+		.clk(MAX10_CLK2_50),
+		.u_input(SW[1:0]),
+		.init_x(10'd0),
+		.paddle_x(l_paddle_x),
+		.paddle_y(l_paddle_y)
+	);
+	
+	make_box left_paddle_location (
+		.X_pix(X_pix),
+		.Y_pix(Y_pix),
+		.box_width(12'd20),
+		.box_height(12'd60),
+		.box_x_location(l_paddle_x),
+		.box_y_location(l_paddle_y),
+		.pixel_clk(pixel_clk),
+		.box(l_paddle)
+	);
+	
+	paddle right_paddle (
+		.clk(MAX10_CLK2_50),
+		.u_input(SW[3:2]),
+		.init_x(10'd620),
+		.paddle_x(r_paddle_x),
+		.paddle_y(r_paddle_y)
+	);
+	
+	make_box right_paddle_location (
+		.X_pix(X_pix),
+		.Y_pix(Y_pix),
+		.box_width(12'd20),
+		.box_height(12'd60),
+		.box_x_location(r_paddle_x),
+		.box_y_location(r_paddle_y),
+		.pixel_clk(pixel_clk),
+		.box(r_paddle)
 	);
 
 endmodule

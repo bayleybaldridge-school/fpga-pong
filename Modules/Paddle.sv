@@ -1,13 +1,10 @@
 module paddle(
 	input [1:0] u_input,
-	input [11:0] init_x,
-	input [11:0] init_y,
+	input [9:0] init_x,
 	output [9:0] paddle_x,
 	output [9:0] paddle_y,
 	input clk
 );
-
-
 
 //to do write sick code that does the math to move a ball from one side of the 
 
@@ -43,41 +40,38 @@ module paddle(
 	output box
 */
 
-
-parameter [11:0] STARTX	= 12'd320;
-parameter [11:0] STARTY	= 12'd240;
-//parameter [11:0] LEFT 	= 12'd90; //I am sure this is the best way to implement this and this will cause no problems in the future
-//parameter [11:0] RIGHT	= 12'd-90;
-//parameter [11:0] UP		= 12'd90;
-//parameter [11:0] DOWN		= (12'd90)*-1;
-parameter [11:0] LEFTPADDLE =12'd200; //wrong rn but will be the x location where the left paddle is
-parameter [11:0] RIGHTPADDLE =12'd200; //" 														  right paddle is
-
-
-
 //reg [11:0] ballx;
 //reg [11:0] bally;
-reg signed [11:0] ball_speed_x;
-reg signed [11:0] ball_speed_y;
-reg [32:0] ballspeed;
-reg signed [3:0] ball_dir_x;
-reg signed [3:0] ball_dir_y;
+parameter [11:0] SPEED	= 12'd5;
+parameter [9:0] START_Y = 10'd220;
+reg [32:0] paddlespeed;
 
 initial begin //at the start of the program make the ball in the center
- ballx = STARTX;
- bally = STARTY;
- ball_dir_x = 1;
- ball_dir_y = 1;
+ paddle_y = START_Y;
 end
  
 always_ff @(posedge clk) begin
 
-ballspeed = ballspeed +1;
+	paddlespeed = paddlespeed +1;
+
+	// Anchor paddle to correct X coordinate
+	paddle_x = init_x;
 		
-	if(ballspeed >1600000) begin //after 1000 cycles of the pixel clock actually move the ball	
-		ballspeed = 0;
+	if(paddlespeed >800000) begin //after 1000 cycles of the pixel clock actually move the ball	
+		paddlespeed = 0;
 		
+		// Moving the paddle by 5 pixels in the direction of movement
 		
+		if( u_input[0:0] == 1 ) begin
+			paddle_y = paddle_y + SPEED;
+		end
+		
+		if( u_input[1:1] == 1 ) begin
+			paddle_y = paddle_y - SPEED;
+		end
+		
+				
+		/*
 		//ballx = 5*(ball_dir_x) + ballx;
 		if(ball_dir_x==1) begin
 			ballx = (ballx+5);
@@ -111,12 +105,8 @@ ballspeed = ballspeed +1;
 				ball_dir_y = 1;
 			end
 		end
-		
-		
+		*/
 		end
-		
-	
-
 end
 	
 endmodule
