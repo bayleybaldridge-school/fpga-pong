@@ -1,6 +1,9 @@
-module ball(
-	output [9:0] ballx,
-	output [9:0] bally,
+module paddle(
+	input [1:0] u_input,
+	input [11:0] init_x,
+	input [11:0] init_y,
+	output [9:0] paddle_x,
+	output [9:0] paddle_y,
 	input clk
 );
 

@@ -162,8 +162,8 @@ DE10_VGA VGA_Driver
 	//make_box customC (.X_pix(X_pix), .Y_pix(Y_pix), .box_width(10'b10000000), .box_height(10'b1000000),
 	//.box_x_location(10'b1000000000), .box_y_location(10'b10000000), .pixel_clk(pixel_clk), .box(box3)); //these look bad
 	
-	
-		ball betternamesoon (
+	// Object module followed by make_box for the object
+	ball betternamesoon (
 		.clk(MAX10_CLK2_50),
 		.ballx(ballx),
 		.bally(bally)
