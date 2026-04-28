@@ -126,7 +126,6 @@ always_ff @(posedge pixel_clk) begin
 			pixel_color <= 12'b0000_0000_1111; // blue
 		end
 		*/
-		
 end
 	
 //Pass pins and current pixel values to display driver
@@ -181,6 +180,7 @@ DE10_VGA VGA_Driver
 		.r_paddle_y(r_paddle_y),
 		.paddle_height(PADDLE_HEIGHT),
 		.ball_height(BALL_HEIGHT),
+		.sound_pin(ARDUINO_IO[0:0]),
 		.reset_sw(KEY[0:0])
 	);
 	
