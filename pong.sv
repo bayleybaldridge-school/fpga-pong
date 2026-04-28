@@ -74,6 +74,23 @@ wire			[9:0]		pixel_cnt;		//How many pixels have been output.
 
 reg			[11:0]		pixel_color;	//12 Bits representing color of pixel, 4 bits for R, G, and B
 										//4 bits for Red are in most significant position, Blue in least
+										
+parameter	[11:0]		PCOLOR_0 = 12'h0_0_f; 		// Red
+parameter	[11:0]		PCOLOR_1 = 12'h0_8_f; 		// Orange
+parameter	[11:0]		PCOLOR_2 = 12'h0_b_f; 		// Yellow
+parameter	[11:0]		PCOLOR_3 = 12'h0_f_0; 		// Green
+parameter	[11:0]		PCOLOR_4 = 12'hf_0_0; 		// Blue
+parameter	[11:0]		PCOLOR_5 = 12'hf_0_8;		// Indigo
+parameter	[11:0]		PCOLOR_6 = 12'hf_0_f;		// Pink
+
+parameter [11:0]	BG_COLOR = 12'b0010_0000_0000; 	// Dark color
+parameter [11:0]	BALL_COLOR = 12'b1111_1111_1111; // White color
+
+reg [11:0] l_color;
+reg [11:0] r_color;
+
+reg [7:0] l_score = 0;
+reg [7:0] r_score = 0;
 
 parameter [11:0] WIDTH    = 12'd640;
 parameter [11:0] HEIGHT   = 12'd480;
@@ -81,7 +98,6 @@ parameter [11:0] TWO      = 12'd2;
 parameter [11:0] FIVE     = 12'd5;
 parameter [11:0] SEVEN    = 12'd7;
 parameter [11:0] THIRTEEN = 12'd13;
-
 
 parameter [11:0] PADDLE_WIDTH	= 12'd20;
 parameter [11:0] PADDLE_HEIGHT	= 12'd60;
@@ -97,35 +113,72 @@ parameter [9:0] SCORE_Y = 10'd10;
 
 // Drawing happens here, one pixel at a time
 always_ff @(posedge pixel_clk) begin
-		// 
-		// I ALSO WROTE THIS LITTLE SECTION HERE
-		//
-		if(ball) begin
-			pixel_color <=12'b1111_0000_1111;
+		
+		// Select left paddle color
+		if (r_score == 0) begin
+			l_color <= PCOLOR_0;
 		end
-		else if (l_paddle) begin
-			pixel_color <= 12'b0000_1111_1111;
+		else if( l_score == 6 ) begin
+			l_color <= PCOLOR_6;
 		end
-		else if (r_paddle) begin
-			pixel_color <= 12'b1111_1111_0000;
+		else if( l_score == 5 ) begin
+			l_color <= PCOLOR_5;
+		end
+		else if( l_score == 4 ) begin
+			l_color <= PCOLOR_4;
+		end
+		else if( l_score == 3 ) begin
+			l_color <= PCOLOR_3;
+		end
+		else if( l_score == 2 ) begin
+			l_color <= PCOLOR_2;
+		end
+		else if( l_score == 1 ) begin
+			l_color <= PCOLOR_1;
 		end
 		else begin
-			pixel_color <=12'b0000_0000_0000;
+			l_color <= BG_COLOR;
 		end
-		//
-		//
-		/*// you can use X_pix and Y_pix location to draw a pixel color
-		 end else if (X_pix < (WIDTH*TWO)/FIVE && Y_pix < (HEIGHT*SEVEN)/THIRTEEN) begin
-			// Red[3:0]_Green[3:0]_Blue[3:0]
-			pixel_color <= 12'b1111_0000_0000; // red
-		end else if ( // What does this condition say?
-			(Y_pix % ((HEIGHT*TWO)/THIRTEEN) > HEIGHT/THIRTEEN)
-		) begin
-			pixel_color <= 12'b1111_1111_1111; // white
-		end else begin
-			pixel_color <= 12'b0000_0000_1111; // blue
+		
+		// Select right paddle color
+		if (l_score == 0) begin
+			r_color <= PCOLOR_0;
 		end
-		*/
+		else if( r_score == 6 ) begin
+			r_color <= PCOLOR_6;
+		end
+		else if( r_score == 5 ) begin
+			r_color <= PCOLOR_5;
+		end
+		else if( r_score == 4 ) begin
+			r_color <= PCOLOR_4;
+		end
+		else if( r_score == 3 ) begin
+			r_color <= PCOLOR_3;
+		end
+		else if( r_score == 2 ) begin
+			r_color <= PCOLOR_2;
+		end
+		else if( r_score == 1 ) begin
+			r_color <= PCOLOR_1;
+		end
+		else begin
+			r_color <= BG_COLOR;
+		end
+		
+		// Draw objects
+		if(ball) begin
+			pixel_color <= BALL_COLOR;
+		end
+		else if (l_paddle) begin
+			pixel_color <= l_color;
+		end
+		else if (r_paddle) begin
+			pixel_color <= r_color;
+		end
+		else begin
+			pixel_color <= BG_COLOR;
+		end
 end
 	
 //Pass pins and current pixel values to display driver
@@ -152,7 +205,6 @@ DE10_VGA VGA_Driver
 	reg l_paddle;
 	reg r_paddle;
 	
-		
 	reg [9:0] ballx;
 	reg [9:0] bally;
 	
@@ -180,8 +232,10 @@ DE10_VGA VGA_Driver
 		.r_paddle_y(r_paddle_y),
 		.paddle_height(PADDLE_HEIGHT),
 		.ball_height(BALL_HEIGHT),
+		.l_score(l_score),
+		.r_score(r_score),
 		.sound_pin(ARDUINO_IO[0:0]),
-		.reset_sw(KEY[0:0])
+		.reset_sw(KEY[0:0]),
 	);
 	
 	make_box balllocation (

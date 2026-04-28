@@ -5,6 +5,8 @@ module ball(
 	input [9:0] r_paddle_y,
 	input [11:0] paddle_height,
 	input [9:0] ball_height,
+	output [7:0] l_score,
+	output [7:0] r_score,
 	output sound_pin,
 	input reset_sw,
 	input clk
@@ -28,11 +30,20 @@ initial begin //at the start of the program make the ball in the center
  bally = STARTY;
  ball_dir_x = -1;
  ball_dir_y = 1;
+ l_score = 0;
+ r_score = 0;
 end
  
 always_ff @(posedge clk) begin
 
 	if(reset_sw == 0) begin
+		ballx = STARTX;
+		bally = STARTY;
+		l_score = 0;
+		r_score = 0;
+	end
+	
+	if( (l_score > 6) || (r_score > 6) ) begin
 		ballx = STARTX;
 		bally = STARTY;
 	end
@@ -70,6 +81,10 @@ always_ff @(posedge clk) begin
 				bally = STARTY;
 				ball_dir_x = -1;
 				ball_dir_y = 0;
+				
+				// Give point to left player
+				l_score = l_score + 1;
+				
 			end
 		end
 		else if(ballx < 20) begin
@@ -96,6 +111,10 @@ always_ff @(posedge clk) begin
 				bally = STARTY;
 				ball_dir_x = 1;
 				ball_dir_y = 0;
+				
+				// Give point to right player
+				r_score = r_score + 1;
+				
 			end
 		end
 		
