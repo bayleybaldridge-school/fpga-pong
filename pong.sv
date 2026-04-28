@@ -2,7 +2,6 @@
 `include "./Modules/DE10_VGA.sv"
 `include "./Modules/Ball.sv"
 `include "./Modules/Paddle.sv"
-`include "./Modules/display_char.v"
 // XOR "Project Navigator" > "File" > Add files > DE10_VGA.v
 // not both
 
