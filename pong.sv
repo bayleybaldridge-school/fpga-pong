@@ -115,8 +115,8 @@ parameter [9:0] SCORE_Y = 10'd10;
 always_ff @(posedge pixel_clk) begin
 		
 		// Select left paddle color
-		if (r_score == 0) begin
-			l_color <= PCOLOR_0;
+		if(r_score > 6) begin
+			l_color <= BG_COLOR;
 		end
 		else if( l_score == 6 ) begin
 			l_color <= PCOLOR_6;
@@ -137,12 +137,12 @@ always_ff @(posedge pixel_clk) begin
 			l_color <= PCOLOR_1;
 		end
 		else begin
-			l_color <= BG_COLOR;
+			l_color <= PCOLOR_0;
 		end
 		
 		// Select right paddle color
-		if (l_score == 0) begin
-			r_color <= PCOLOR_0;
+		if(l_score > 6) begin
+			r_color <= BG_COLOR;
 		end
 		else if( r_score == 6 ) begin
 			r_color <= PCOLOR_6;
@@ -163,7 +163,7 @@ always_ff @(posedge pixel_clk) begin
 			r_color <= PCOLOR_1;
 		end
 		else begin
-			r_color <= BG_COLOR;
+			r_color <= PCOLOR_0;
 		end
 		
 		// Draw objects
